@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>ניצחונות קטנים</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;600;700;800&display=swap" rel="stylesheet">
+<meta name="theme-color" content="#ff7a59">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<style>
+:root{--bg:#fff7f2;--card:#fff;--ink:#2b2233;--muted:#8a7f90;--accent:#ff7a59;--accent2:#ffb347;--mint:#2ec4a6;--mintbg:#e7f9f4;--water:#3aa8ff;--line:#f1e4dc}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;font-family:"Rubik","Segoe UI",system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--ink);padding-bottom:calc(86px + env(safe-area-inset-bottom))}
+button{font:inherit;cursor:pointer;border:0}
+input,select{font:inherit}
+.wrap{max-width:520px;margin:0 auto;padding:16px 16px 0}
+.hdr{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.hello{font-size:13px;color:var(--muted);font-weight:600}
+.title{font-size:24px;font-weight:800;margin:2px 0 0}
+.streak{background:#fff;border-radius:999px;padding:8px 14px;font-weight:800;box-shadow:0 2px 0 var(--line);white-space:nowrap}
+.streak.hot{background:linear-gradient(135deg,#ffb347,#ff7a59);color:#fff}
+.lvl{margin-top:14px;background:#fff;border-radius:18px;padding:12px 14px;box-shadow:0 2px 0 var(--line)}
+.lvlrow{display:flex;justify-content:space-between;font-weight:800;font-size:14px}
+.lvlrow span:last-child{color:var(--muted);font-weight:700}
+.bar{height:10px;background:#f5ece6;border-radius:99px;overflow:hidden;margin-top:8px}
+.bar>i{display:block;height:100%;background:linear-gradient(90deg,var(--accent2),var(--accent));border-radius:99px;transition:width .6s cubic-bezier(.2,.9,.3,1.2)}
+.msg{margin:14px 0 0;padding:14px 16px;border-radius:20px;font-weight:700;font-size:15px;line-height:1.45;background:linear-gradient(135deg,#ffb347,#ff7a59);color:#fff}.msg.calm{background:linear-gradient(135deg,#a18cd1,#fbc2eb)}.msg b{display:block;font-size:18px;margin-bottom:2px}
+.love{margin-top:10px;padding:14px 16px;border-radius:20px;background:#fff0f5;border:2px dashed #ffb3cf;font-weight:700;line-height:1.45}.love .l1{font-size:12px;color:#d6457f;font-weight:800;margin-bottom:4px}.love .l2{font-size:16px}.love button{margin-top:8px;background:#ffd6e6;color:#b8326a;font-weight:800;padding:6px 12px;border-radius:12px;font-size:13px}
+.quote{margin:14px 0 4px;padding:12px 14px;border-radius:18px;background:linear-gradient(135deg,#fff0e8,#fdf3ff);font-weight:700;font-size:14px;line-height:1.4}
+.daynav{display:flex;align-items:center;justify-content:space-between;margin:16px 0 4px}
+.daynav button{background:#fff;width:38px;height:38px;border-radius:12px;font-size:18px;box-shadow:0 2px 0 var(--line)}
+.daynav button:disabled{opacity:.3}
+.daynav .lbl{font-weight:800;font-size:18px;text-align:center}
+.daynav .lbl small{display:block;font-size:12px;color:var(--muted);font-weight:600}
+.summary{display:flex;align-items:center;gap:16px;background:#fff;border-radius:22px;padding:14px 16px;margin-top:10px;box-shadow:0 2px 0 var(--line)}
+.ring{width:74px;height:74px;flex:none;position:relative}
+.ring svg{transform:rotate(-90deg)}
+.ring b{position:absolute;inset:0;display:grid;place-items:center;font-size:17px}
+.summary .t{font-weight:800}
+.summary .s{color:var(--muted);font-size:13px;margin-top:2px}
+.habit{display:flex;align-items:center;gap:12px;background:#fff;border-radius:20px;padding:12px 14px;margin:10px 0;box-shadow:0 2px 0 var(--line);transition:background .3s,transform .15s}
+.habit.done{background:var(--mintbg)}
+.habit.pop{animation:pop .45s}
+@keyframes pop{40%{transform:scale(1.04)}100%{transform:scale(1)}}
+.emo{font-size:26px;width:44px;height:44px;display:grid;place-items:center;background:#fff6f1;border-radius:14px;flex:none}
+.done .emo{background:#d4f3ea}
+.hb{flex:1;min-width:0}
+.hn{font-weight:800;font-size:15px;line-height:1.25}
+.hs{font-size:12px;color:var(--muted);font-weight:700;margin-top:2px}
+.done .hs{color:var(--mint)}
+.chk{width:44px;height:44px;border-radius:50%;background:#fff;border:3px solid #eadcd3;color:transparent;font-size:22px;font-weight:900;flex:none;transition:all .2s}
+.done .chk{background:var(--mint);border-color:var(--mint);color:#fff}
+.drops{display:flex;flex-wrap:wrap;gap:2px;margin-top:6px;font-size:15px}
+.drops span{opacity:.22;filter:grayscale(1);transition:all .25s}
+.drops span.on{opacity:1;filter:none}
+.ctr{display:flex;align-items:center;gap:6px;flex:none}
+.ctr button{width:36px;height:36px;border-radius:12px;background:#f5ece6;font-size:20px;font-weight:800;color:var(--ink)}
+.ctr button.plus{background:var(--water);color:#fff;width:44px;height:44px;font-size:24px}
+.num{display:flex;gap:6px;margin-top:6px;align-items:center}
+.num input{direction:ltr;text-align:right;width:96px;padding:7px 10px;border-radius:10px;border:2px solid var(--line);background:#fff;font-weight:800}
+.num .bar{flex:1;margin:0}
+.num .bar>i{background:linear-gradient(90deg,#7bdcb5,var(--mint))}
+nav{position:fixed;left:0;right:0;bottom:0;background:#fff;display:flex;justify-content:center;box-shadow:0 -2px 12px rgba(80,40,20,.08);padding-bottom:env(safe-area-inset-bottom);z-index:5}
+nav button{flex:1;max-width:130px;background:none;padding:10px 0 12px;font-size:11px;font-weight:800;color:var(--muted)}
+nav button span{display:block;font-size:22px;margin-bottom:2px;filter:grayscale(1);opacity:.6}
+nav button.on{color:var(--accent)}
+nav button.on span{filter:none;opacity:1}
+h2{font-size:20px;margin:18px 0 8px}
+h3{font-size:15px;margin:18px 0 8px}
+.card{background:#fff;border-radius:20px;padding:14px 16px;box-shadow:0 2px 0 var(--line);margin-bottom:12px}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.stat{background:#fff;border-radius:18px;padding:12px 14px;box-shadow:0 2px 0 var(--line)}
+.stat b{font-size:24px;display:block}
+.stat small{color:var(--muted);font-weight:700;font-size:12px}
+.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+.cal .dh{font-size:11px;color:var(--muted);text-align:center;font-weight:800}
+.cal .c{aspect-ratio:1;border-radius:9px;background:#f5ece6;display:grid;place-items:center;font-size:11px;font-weight:800;color:#b9aab0}
+.cal .c.l1{background:#ffe1cf;color:#c46a3f}.cal .c.l2{background:#ffb98f;color:#fff}.cal .c.l3{background:#ff8a5e;color:#fff}.cal .c.l4{background:var(--mint);color:#fff}
+.cal .c.today{outline:3px solid var(--ink);outline-offset:1px}
+.cal .c.empty{background:none}
+.wk{display:flex;align-items:center;gap:10px;margin:8px 0;font-size:14px;font-weight:700}
+.wk .n{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.wk .dots{display:flex;gap:3px}
+.wk .dots i{width:12px;height:12px;border-radius:4px;background:#f0e5de}
+.wk .dots i.on{background:var(--mint)}
+.badges{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.badge{background:#fff;border-radius:18px;padding:14px 8px;text-align:center;box-shadow:0 2px 0 var(--line)}
+.badge .i{font-size:34px}
+.badge .n{font-weight:800;font-size:13px;margin-top:4px}
+.badge .d{font-size:11px;color:var(--muted);font-weight:600;margin-top:2px;line-height:1.3}
+.badge.lock .i{filter:grayscale(1);opacity:.25}
+.badge.lock .n{color:var(--muted)}
+.row{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--line)}
+.row:last-child{border:0}
+.row .n{flex:1;font-weight:700;font-size:14px;min-width:0}
+.row input[type=number]{width:72px;padding:6px 8px;border-radius:10px;border:2px solid var(--line)}
+.x{background:#fbeeee;color:#d14b4b;width:32px;height:32px;border-radius:10px;font-weight:900}
+.add{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+.add input{padding:9px 10px;border-radius:12px;border:2px solid var(--line);min-width:0}
+.add input.e{width:56px;text-align:center}
+.add input.nm{flex:1}
+.btn{background:var(--accent);color:#fff;font-weight:800;padding:10px 16px;border-radius:14px}
+.btn.alt{background:#f5ece6;color:var(--ink)}
+.btn.w{background:var(--water)}
+.note{font-size:13px;color:var(--muted);line-height:1.45;font-weight:600}
+.sw{position:relative;width:50px;height:30px;flex:none}
+.sw input{opacity:0;width:0;height:0}
+.sw i{position:absolute;inset:0;background:#e6d9d1;border-radius:99px;transition:.2s}
+.sw i:before{content:"";position:absolute;width:24px;height:24px;left:3px;top:3px;background:#fff;border-radius:50%;transition:.2s}
+.sw input:checked+i{background:var(--mint)}
+.sw input:checked+i:before{transform:translateX(20px)}
+.times{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;font-size:14px;font-weight:700;align-items:center}
+.times select{padding:6px 8px;border-radius:10px;border:2px solid var(--line);background:#fff}
+#toast{position:fixed;left:50%;top:16px;transform:translate(-50%,-140%);background:var(--ink);color:#fff;padding:12px 18px;border-radius:16px;font-weight:800;font-size:15px;z-index:20;transition:transform .35s cubic-bezier(.2,.9,.3,1.3);max-width:92vw;text-align:center;box-shadow:0 8px 24px rgba(0,0,0,.2)}
+#toast.show{transform:translate(-50%,0)}
+#fx{position:fixed;inset:0;pointer-events:none;z-index:30}
+.modal{position:fixed;inset:0;background:rgba(43,34,51,.45);display:none;align-items:center;justify-content:center;z-index:25;padding:20px}
+.modal.show{display:flex}
+.mbox{background:#fff;border-radius:28px;padding:26px 22px;text-align:center;max-width:360px;width:100%;animation:rise .5s cubic-bezier(.2,.9,.3,1.3)}
+@keyframes rise{from{transform:scale(.6) translateY(40px);opacity:0}}
+.clap{font-size:64px;display:inline-block;animation:clap .5s ease-in-out infinite alternate}
+@keyframes clap{to{transform:scale(1.18) rotate(-8deg)}}
+.mbox h2{margin:8px 0 6px;font-size:24px}
+.mbox p{color:var(--muted);font-weight:700;margin:0 0 18px;line-height:1.4}
+.hide{display:none}
+</style>
+</head>
+<body>
+<canvas id="fx"></canvas>
+<div id="toast"></div>
+<div class="modal" id="modal"><div class="mbox"><div class="clap" id="mIcon">👏</div><h2 id="mTitle"></h2><p id="mText"></p><button class="btn" id="mClose">תודה! 💛</button></div></div>
+
+<div class="wrap">
+  <div class="hdr">
+    <div><div class="hello" id="hello"></div><div class="title">ניצחונות קטנים</div></div>
+    <div class="streak" id="streak"></div>
+  </div>
+  <div class="lvl"><div class="lvlrow"><span id="lvlName"></span><span id="lvlXp"></span></div><div class="bar"><i id="lvlBar"></i></div></div>
+
+  <section id="tab-today">
+    <div class="msg" id="dailyMsg"></div>
+    <div class="quote" id="quote"></div>
+    <div class="love" id="loveCard"></div>
+    <div class="daynav"><button id="prev" aria-label="יום קודם">›</button><div class="lbl" id="dayLbl"></div><button id="next" aria-label="יום הבא">‹</button></div>
+    <div class="summary" id="summary"></div>
+    <div id="habits"></div>
+  </section>
+
+  <section id="tab-history" class="hide"></section>
+  <section id="tab-badges" class="hide"></section>
+  <section id="tab-settings" class="hide"></section>
+</div>
+
+<nav id="nav">
+  <button data-tab="today" class="on"><span>✅</span>היום</button>
+  <button data-tab="history"><span>📅</span>התקדמות</button>
+  <button data-tab="badges"><span>🏅</span>תגים</button>
+  <button data-tab="settings"><span>⚙️</span>הגדרות</button>
+</nav>
+
+<script src="firebase-config.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-messaging-compat.js"></script>
+<script>
+const KEY = 'littlewins.he.v1';
+const DEFAULT_HABITS = [
+  {id:'steps',  emoji:'👟', name:'ללכת 6,000 צעדים', type:'number', goal:6000, unit:'צעדים', xp:30},
+  {id:'water',  emoji:'💧', name:'לשתות 8 כוסות מים', type:'count', goal:8, unit:'כוסות', xp:20},
+  {id:'slow',   emoji:'🐢', name:'לאכול לאט – להניח את המזלג בין ביס לביס', type:'check', xp:15},
+  {id:'nosnack',emoji:'🚫', name:'בלי נשנושים בין הארוחות', type:'check', xp:20},
+  {id:'veg',    emoji:'🥗', name:'ירקות בצהריים ובערב', type:'check', xp:15},
+  {id:'sleep',  emoji:'😴', name:'לכבות את האור עד 23:00', type:'check', xp:10},
+  {id:'dinner', emoji:'🕢', name:'לסיים לאכול עד 19:30', type:'check', xp:15},
+  {id:'love',   emoji:'💗', name:'רגע של חמלה עצמית – לומר לעצמי משהו טוב', type:'check', xp:10},
+  {id:'strength',emoji:'🏋️‍♀️', name:'אימון כוח / ליבה – פעמיים בשבוע', type:'weekly', goal:2, xp:30},
+];
+const LOVE = [
+  'את מדהימה – בדיוק כמו שאת עכשיו.',
+  'את מספיקה. תמיד היית.',
+  'אפשר לשאוף לגרסה טובה יותר של עצמי – וגם הגרסה הזאת טובה.',
+  'דברי אל עצמך כמו שהיית מדברת אל החברה הכי טובה שלך.',
+  'הגוף שלך נושא אותך כל יום. מגיע לו יחס עדין ואוהב.',
+  'את לא צריכה להרוויח את האהבה שלך לעצמך.',
+  'הערך שלך לא נמדד במספר על המשקל.',
+  'מותר לך לנוח. מותר לך להיות לא מושלמת.',
+  'טעות היא חלק מהדרך, לא סוף הדרך.',
+  'חמלה עצמית היא לא ויתור – היא הכוח שמאפשר להמשיך.',
+  'כל פעם שאת דואגת לעצמך, את אומרת לעצמך "אני חשובה".',
+  'תני לעצמך חיבוק. באמת. עכשיו. 🤗',
+  'את כבר בדרך, ואת כבר מתקדמת.',
+  'מה שאת עושה בשביל עצמך – נחשב. גם הדברים הקטנים.',
+];
+const STREAK_LINES = ['עוד צעד אחד קרוב יותר ליעד! 🎯','את בונה משהו אמיתי, יום אחרי יום 🧱','הרצף שלך הוא הוכחה שאת יכולה 💪','ככה נראית התקדמות – ממשיכות! 🚀','כל יום ברצף מקרב אותך לגרסה שחלמת עליה ✨'];
+const NO_DRAMA = 'אתמול היה יום אחר – וזה בסדר גמור. התהליך שלנו ספירלי, הוא לא יכול להיות תמיד ישר. היום מתחילים מחדש, בלי ייסורי מצפון 💛';
+const PERFECT_BONUS = 50;
+const LEVELS = ['נבט 🌱','שתיל 🌿','פריחה 🌸','חמנייה 🌻','כוכבת עולה ⭐','כוכב שביט 🌠','אלופה 🏆','אגדה 👑'];
+const XP_PER_LEVEL = 300;
+
+const CHEERS = ['יש! עשית את זה! 🎉','תראי אותך! 🙌','עוד ניצחון! 🏅','גאה בך! 💛','בום! עוד אחד! 💥','צעד קטן, עניין גדול ✨','את בוערת! 🔥','כל הכבוד שדאגת לעצמך 🌟','מחיאות כפיים! 👏👏👏','גיבורת הרגלים! 🦸‍♀️','את פשוט תותחית! 💪'];
+const WATER_CHEERS = ['גלוג גלוג 💧','תחנת מילוי 🚰','הגוף שלך אומר תודה 💦','לגימה ועוד לגימה 🥤','גם צמחים וגם את צריכים מים 🌱'];
+const QUOTES = [
+  'לא צריך להיות מושלמת. צריך רק להופיע היום.',
+  'כל כוס מים, כל צעד וכל ביס איטי הם הצבעה בעד מי שאת הופכת להיות.',
+  'התקדמות, לא שלמות. ניצחונות קטנים מצטברים לגדולים.',
+  'את לא מתחילה מחדש – את מתחילה מניסיון.',
+  'בחירה טובה אחת הופכת את הבאה לקלה יותר.',
+  'תהיי גאה בדברים הקטנים. הם הדברים הגדולים בתחפושת.',
+  'לאט זה עדיין קדימה.',
+  'פספסת יום? זה מידע, לא כישלון. היום זה דף חדש.',
+  'את בונה הרגלים, לא רק מורידה במשקל. הרגלים נשארים.',
+  'תתייחסי לעצמך כמו למישהי שאת אוהבת ושמשקיעה מאוד.',
+  'הזמן הכי טוב לשתות מים היה לפני שעה. הזמן השני הכי טוב הוא עכשיו 💧',
+  'עקביות מנצחת עוצמה. שומרים על זה קטן וממשיכים.',
+  'הליכה אף פעם לא מבוזבזת.',
+  'את של העתיד כבר אסירת תודה.',
+];
+const BADGES = [
+  {id:'first',  i:'🌱', n:'ניצחון ראשון',   d:'השלמת הרגל ראשון',           t:c=>c.anyDone},
+  {id:'perfect1',i:'🌈',n:'יום מושלם',      d:'השלמת כל ההרגלים ביום אחד',  t:c=>c.perfect>=1},
+  {id:'streak3',i:'🔥', n:'על הגל',         d:'רצף של 3 ימים',               t:c=>c.best>=3},
+  {id:'streak7',i:'⚡', n:'לוחמת שבוע',     d:'רצף של 7 ימים',               t:c=>c.best>=7},
+  {id:'streak14',i:'💪',n:'שבועיים חזקים',  d:'רצף של 14 ימים',              t:c=>c.best>=14},
+  {id:'streak30',i:'🏆',n:'מאסטרית הרגלים', d:'רצף של 30 ימים',              t:c=>c.best>=30},
+  {id:'water7', i:'🐳', n:'מלכת המים',      d:'יעד המים הושג ב־7 ימים',      t:c=>c.water>=7},
+  {id:'steps7', i:'🥾', n:'כוכבת הצעדים',   d:'יעד הצעדים הושג ב־7 ימים',    t:c=>c.steps>=7},
+  {id:'steps30',i:'🗺️', n:'מגלת עולמות',    d:'יעד הצעדים הושג ב־30 ימים',   t:c=>c.steps>=30},
+  {id:'snack7', i:'🛡️', n:'מגן הנשנושים',   d:'7 ימים בלי נשנושים',          t:c=>c.snack>=7},
+  {id:'slow7',  i:'🧘', n:'אוכלת במודעות',  d:'אכילה איטית ב־7 ימים',        t:c=>c.slow>=7},
+  {id:'strong8', i:'🏋️‍♀️', n:'חזקה מבפנים',  d:'8 אימוני כוח/ליבה',            t:c=>c.strength>=8},
+  {id:'dinner7', i:'🌙', n:'מטבח סגור',      d:'סיימת לאכול עד 19:30 ב־7 ימים', t:c=>c.dinner>=7},
+  {id:'love14',  i:'💗', n:'אוהבת את עצמי',  d:'14 רגעים של חמלה עצמית',       t:c=>c.love>=14},
+  {id:'perfect10',i:'💎',n:'יהלום',         d:'10 ימים מושלמים',             t:c=>c.perfect>=10},
+  {id:'xp1000', i:'🚀', n:'1,000 נקודות',   d:'צברת 1,000 נקודות',           t:c=>c.xp>=1000},
+  {id:'xp5000', i:'👑', n:'מלכותית',        d:'צברת 5,000 נקודות',           t:c=>c.xp>=5000},
+];
+
+// ---------- state ----------
+function defaults(){return {habits:JSON.parse(JSON.stringify(DEFAULT_HABITS)),days:{},seenBadges:[],lastRemind:0,v2:true,settings:{sound:true,remind:{on:false,start:7,end:22,every:60}}}}
+function load(){try{const s=JSON.parse(localStorage.getItem(KEY));if(s&&s.habits)return s}catch(e){}return defaults()}
+let S = load();
+if(!S.v2){for(const d of DEFAULT_HABITS)if(!S.habits.some(h=>h.id===d.id))S.habits.push(JSON.parse(JSON.stringify(d)));S.v2=true;S.settings.remind={on:S.settings.remind.on,start:7,end:22,every:60};try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}scheduleSync()}
+
+const pad = n=>String(n).padStart(2,'0');
+const keyOf = d=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+const todayKey = ()=>keyOf(new Date());
+const fromKey = k=>{const [y,m,d]=k.split('-').map(Number);return new Date(y,m-1,d)};
+const addDays = (k,n)=>{const d=fromKey(k);d.setDate(d.getDate()+n);return keyOf(d)};
+const esc = s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+let viewKey = todayKey();
+
+function isDone(h,v){return (h.type==='check'||h.type==='weekly')?!!v:(Number(v)||0)>=h.goal}
+function weekStart(k){const d=fromKey(k);d.setDate(d.getDate()-d.getDay());return keyOf(d)}
+function weekCount(h,k){let n=0,w=weekStart(k);for(let i=0;i<7;i++){const kk=addDays(w,i);if((S.days[kk]||{})[h.id])n++}return n}
+function dayStats(k){const day=S.days[k]||{};let done=0,xp=0;const daily=S.habits.filter(h=>h.type!=='weekly');for(const h of S.habits){if(isDone(h,day[h.id])){xp+=h.xp;if(h.type!=='weekly')done++}}const total=daily.length;const perfect=total>0&&done===total;if(perfect)xp+=PERFECT_BONUS;return {done,total,pct:total?done/total:0,perfect,xp}}
+function goodDay(k){return dayStats(k).pct>=0.5}
+function totalXP(){let x=0;for(const k in S.days)x+=dayStats(k).xp;return x}
+function currentStreak(){let k=todayKey();if(!goodDay(k))k=addDays(k,-1);let n=0;while(goodDay(k)){n++;k=addDays(k,-1)}return n}
+function bestStreak(){const keys=Object.keys(S.days).sort();if(!keys.length)return 0;let best=0,run=0,k=keys[0];const end=todayKey();while(k<=end){if(goodDay(k)){run++;best=Math.max(best,run)}else run=0;k=addDays(k,1)}return best}
+function badgeCtx(){const c={anyDone:false,perfect:0,water:0,steps:0,snack:0,slow:0,strength:0,dinner:0,love:0,best:bestStreak(),xp:totalXP()};const H=id=>S.habits.find(h=>h.id===id);for(const k in S.days){const day=S.days[k],st=dayStats(k);if(st.done)c.anyDone=true;if(st.perfect)c.perfect++;for(const [id,f] of [['water','water'],['steps','steps'],['nosnack','snack'],['slow','slow'],['strength','strength'],['dinner','dinner'],['love','love']]){const h=H(id);if(h&&isDone(h,day[id]))c[f]++}}return c}
+
+// ---------- fx: confetti, sound, toast ----------
+const cv=document.getElementById('fx'),cx=cv.getContext('2d');let parts=[],anim=false;
+function sizeCv(){cv.width=innerWidth*devicePixelRatio;cv.height=innerHeight*devicePixelRatio;cx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0)}
+addEventListener('resize',sizeCv);sizeCv();
+const COLORS=['#ff7a59','#ffb347','#2ec4a6','#3aa8ff','#c77dff','#ffd60a','#ff5d8f'];
+function confetti(x,y,n=40,spread=1){for(let i=0;i<n;i++){const a=Math.random()*Math.PI*2,s=(2+Math.random()*6)*spread;parts.push({x,y,vx:Math.cos(a)*s,vy:Math.sin(a)*s-4*spread,g:.18,w:5+Math.random()*6,h:8+Math.random()*8,r:Math.random()*6,vr:(Math.random()-.5)*.3,c:COLORS[i%COLORS.length],life:90+Math.random()*60})}if(!anim){anim=true;requestAnimationFrame(tick)}}
+function rain(){for(let i=0;i<160;i++)parts.push({x:Math.random()*innerWidth,y:-20-Math.random()*innerHeight*.6,vx:(Math.random()-.5)*2,vy:2+Math.random()*3,g:.05,w:6+Math.random()*6,h:10+Math.random()*8,r:Math.random()*6,vr:(Math.random()-.5)*.25,c:COLORS[i%COLORS.length],life:260});if(!anim){anim=true;requestAnimationFrame(tick)}}
+function tick(){cx.clearRect(0,0,innerWidth,innerHeight);parts=parts.filter(p=>p.life>0&&p.y<innerHeight+40);for(const p of parts){p.vy+=p.g;p.vx*=.99;p.x+=p.vx;p.y+=p.vy;p.r+=p.vr;p.life--;cx.save();cx.translate(p.x,p.y);cx.rotate(p.r);cx.globalAlpha=Math.min(1,p.life/30);cx.fillStyle=p.c;cx.fillRect(-p.w/2,-p.h/2,p.w,p.h);cx.restore()}if(parts.length)requestAnimationFrame(tick);else{anim=false;cx.clearRect(0,0,innerWidth,innerHeight)}}
+let actx;
+function chime(big){if(!S.settings.sound)return;try{actx=actx||new (window.AudioContext||window.webkitAudioContext)();const notes=big?[523,659,784,1047,1319]:[659,988];notes.forEach((f,i)=>{const o=actx.createOscillator(),g=actx.createGain();o.type='triangle';o.frequency.value=f;const t=actx.currentTime+i*(big?.11:.08);g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.18,t+.02);g.gain.exponentialRampToValueAtTime(.001,t+.4);o.connect(g).connect(actx.destination);o.start(t);o.stop(t+.45)})}catch(e){}}
+let tt;function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('show'),2300)}
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+function modal(icon,title,text){document.getElementById('mIcon').textContent=icon;document.getElementById('mTitle').textContent=title;document.getElementById('mText').textContent=text;document.getElementById('modal').classList.add('show')}
+document.getElementById('mClose').onclick=()=>document.getElementById('modal').classList.remove('show');
+
+// ---------- rendering ----------
+function renderHeader(){
+  const h=new Date().getHours();
+  document.getElementById('hello').textContent=(h<12?'בוקר טוב':h<17?'צהריים טובים':'ערב טוב')+' ☀️';
+  const s=currentStreak(),el=document.getElementById('streak');
+  el.textContent=s?(s===1?'🔥 יום אחד':`🔥 ${s} ימים`):'🔥 בואי נתחיל רצף';el.classList.toggle('hot',s>=3);
+  const xp=totalXP(),li=Math.min(Math.floor(xp/XP_PER_LEVEL),LEVELS.length-1),max=li===LEVELS.length-1;
+  document.getElementById('lvlName').textContent=`שלב ${li+1} · ${LEVELS[li]}`;
+  document.getElementById('lvlXp').textContent=max?`${xp} נק׳`:`${xp-li*XP_PER_LEVEL} / ${XP_PER_LEVEL} נק׳`;
+  document.getElementById('lvlBar').style.width=(max?100:((xp-li*XP_PER_LEVEL)/XP_PER_LEVEL*100))+'%';
+}
+function habitHTML(h,v){
+  const done=isDone(h,v);
+  let body='',ctrl='';
+  if(h.type==='weekly'){const wc=weekCount(h,viewKey);ctrl=`<button class="chk" data-act="toggle" data-id="${h.id}" aria-label="בוצע">✓</button>`;body=`<div class="hs">${wc>=h.goal?'יעד השבוע הושג! 💪 ':''}${wc} / ${h.goal} השבוע · +${h.xp} נק׳ לאימון</div>`}
+  else if(h.type==='check'){ctrl=`<button class="chk" data-act="toggle" data-id="${h.id}" aria-label="בוצע">✓</button>`;body=`<div class="hs">${done?'בוצע! ':''}+${h.xp} נק׳</div>`}
+  else if(h.type==='count'){const n=Number(v)||0;body=`<div class="hs">${n} / ${h.goal} ${esc(h.unit||'')} · +${h.xp} נק׳</div><div class="drops">${Array.from({length:h.goal},(_,i)=>`<span class="${i<n?'on':''}">${h.emoji}</span>`).join('')}</div>`;ctrl=`<div class="ctr"><button data-act="dec" data-id="${h.id}" aria-label="פחות">−</button><button class="plus" data-act="inc" data-id="${h.id}" aria-label="עוד">+</button></div>`}
+  else{const n=Number(v)||0;body=`<div class="hs">${n.toLocaleString()} / ${h.goal.toLocaleString()} ${esc(h.unit||'')} · +${h.xp} נק׳</div><div class="num"><input type="number" inputmode="numeric" min="0" placeholder="0" value="${n||''}" data-act="num" data-id="${h.id}"><div class="bar"><i style="width:${Math.min(100,n/h.goal*100)}%"></i></div></div>`}
+  return `<div class="habit ${done?'done':''}" id="h-${h.id}"><div class="emo">${h.emoji}</div><div class="hb"><div class="hn">${esc(h.name)}</div>${body}</div>${ctrl}</div>`;
+}
+function renderToday(){
+  const t=todayKey();
+  const doy=Math.floor((fromKey(t)-new Date(fromKey(t).getFullYear(),0,0))/864e5);
+  document.getElementById('quote').textContent='💬 '+QUOTES[doy%QUOTES.length];
+  renderDaily(t,doy);
+  const d=fromKey(viewKey);
+  const lbl=viewKey===t?'היום':viewKey===addDays(t,-1)?'אתמול':d.toLocaleDateString('he-IL',{weekday:'long'});
+  document.getElementById('dayLbl').innerHTML=`${lbl}<small>${d.toLocaleDateString('he-IL',{day:'numeric',month:'long'})}</small>`;
+  document.getElementById('next').disabled=viewKey>=t;
+  const st=dayStats(viewKey),C=2*Math.PI*30;
+  const msg=st.perfect?'יום מושלם! את מדהימה 🌈':st.done===0?'בואי נשיג את הניצחון הקטן הראשון!':st.pct>=.5?'עברת את החצי – ממשיכות!':'התחלה יפה – כל ניצחון נחשב!';
+  document.getElementById('summary').innerHTML=`<div class="ring"><svg width="74" height="74"><circle cx="37" cy="37" r="30" fill="none" stroke="#f5ece6" stroke-width="9"/><circle cx="37" cy="37" r="30" fill="none" stroke="${st.perfect?'#2ec4a6':'#ff7a59'}" stroke-width="9" stroke-linecap="round" stroke-dasharray="${C}" stroke-dashoffset="${C*(1-st.pct)}" style="transition:stroke-dashoffset .6s"/></svg><b>${st.done}/${st.total}</b></div><div><div class="t">${msg}</div><div class="s">${st.xp} נקודות${st.perfect?` (כולל בונוס יום מושלם +${PERFECT_BONUS})`:` · השלימי הכל לבונוס +${PERFECT_BONUS}`}</div></div>`;
+  const day=S.days[viewKey]||{};
+  document.getElementById('habits').innerHTML=S.habits.map(h=>habitHTML(h,day[h.id])).join('');
+}
+let loveIdx=null;
+function dailyMessage(t){
+  const y=addDays(t,-1),hasHistory=Object.keys(S.days).some(k=>k<t);
+  if(!hasHistory)return {calm:false,title:'ברוכה הבאה! 🌱',text:'היום מתחילים. כל ניצחון קטן נחשב – ואת כבר עשית את הצעד הראשון כשפתחת את האפליקציה.'};
+  if(goodDay(y)){const s=currentStreak()||1;return {calm:false,title:`🔥 ${s===1?'יום אחד':s+' ימים'} ברצף!`,text:`${STREAK_LINES[s%STREAK_LINES.length]} אתמול עמדת ביעדים – היום את עוד צעד אחד קרוב יותר ליעד שלך.`}}
+  return {calm:true,title:'No drama 💜',text:NO_DRAMA};
+}
+function renderDaily(t,doy){
+  const m=dailyMessage(t),el=document.getElementById('dailyMsg');
+  el.className='msg'+(m.calm?' calm':'');el.innerHTML=`<b>${m.title}</b>${m.text}`;
+  if(loveIdx===null)loveIdx=doy%LOVE.length;
+  document.getElementById('loveCard').innerHTML=`<div class="l1">💗 תזכורת לעצמי</div><div class="l2">${LOVE[loveIdx]}</div><button data-love="1">עוד אחת 💗</button>`;
+}
+document.addEventListener('click',e=>{if(e.target.closest('[data-love]')){loveIdx=(loveIdx+1)%LOVE.length;renderToday()}});
+function dailyGreeting(){
+  const t=todayKey();if(S.lastDaily===t)return;S.lastDaily=t;save();
+  const m=dailyMessage(t);
+  setTimeout(()=>{if(!m.calm){confetti(innerWidth/2,innerHeight/3,70,1.2);chime(true)}modal(m.calm?'🌀':'🔥',m.title,m.text)},500);
+}
+function renderHistory(){
+  const t=todayKey(),cs=currentStreak(),bs=bestStreak(),c=badgeCtx();
+  let html=`<h2>ההתקדמות שלך</h2><div class="stats"><div class="stat"><b>🔥 ${cs}</b><small>רצף נוכחי</small></div><div class="stat"><b>⭐ ${bs}</b><small>רצף שיא</small></div><div class="stat"><b>🌈 ${c.perfect}</b><small>ימים מושלמים</small></div><div class="stat"><b>✨ ${c.xp.toLocaleString()}</b><small>סה״כ נקודות</small></div></div>`;
+  // calendar: last 5 weeks, Sunday-first
+  const end=fromKey(t);const start=new Date(end);start.setDate(end.getDate()-end.getDay()-28);
+  html+=`<h3>5 השבועות האחרונים</h3><div class="card"><div class="cal">${['א','ב','ג','ד','ה','ו','ש'].map(x=>`<div class="dh">${x}</div>`).join('')}`;
+  for(let i=0;i<35;i++){const d=new Date(start);d.setDate(start.getDate()+i);const k=keyOf(d);if(k>t){html+=`<div class="c empty"></div>`;continue}const st=dayStats(k);const lv=st.perfect?4:st.pct>=.66?3:st.pct>=.5?2:st.pct>0?1:0;html+=`<div class="c ${lv?'l'+lv:''} ${k===t?'today':''}" title="${k}: ${st.done}/${st.total}">${d.getDate()}</div>`}
+  html+=`</div><div class="note" style="margin-top:10px">ירוק = יום מושלם · כתום = חלק מההרגלים. יום עם חצי מההרגלים או יותר שומר על הרצף.</div></div>`;
+  html+=`<h3>7 הימים האחרונים, הרגל אחרי הרגל</h3><div class="card">`;
+  for(const h of S.habits){let dots='',n=0;for(let i=6;i>=0;i--){const k=addDays(t,-i);const on=isDone(h,(S.days[k]||{})[h.id]);if(on)n++;dots+=`<i class="${on?'on':''}"></i>`}html+=`<div class="wk"><span>${h.emoji}</span><span class="n">${esc(h.name)}</span><span class="dots">${dots}</span><span style="width:30px;text-align:left">${n}/7</span></div>`}
+  html+=`</div>`;
+  document.getElementById('tab-history').innerHTML=html;
+}
+function renderBadges(){
+  const c=badgeCtx(),got=BADGES.filter(b=>b.t(c)).length;
+  document.getElementById('tab-badges').innerHTML=`<h2>תגים <span style="color:var(--muted);font-size:15px">${got}/${BADGES.length}</span></h2><div class="badges">${BADGES.map(b=>`<div class="badge ${b.t(c)?'':'lock'}"><div class="i">${b.i}</div><div class="n">${b.n}</div><div class="d">${b.d}</div></div>`).join('')}</div>`;
+}
+function hourOpts(sel){let o='';for(let h=5;h<=24;h++)o+=`<option value="${h}" ${h==sel?'selected':''}>${pad(h%24)}:00</option>`;return o}
+function renderSettings(){
+  const r=S.settings.remind,perm=('Notification' in window)?Notification.permission:'unsupported';
+  const standalone=matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;
+  const ios=/iphone|ipad|ipod/i.test(navigator.userAgent);
+  let push='';
+  if(!cloudConfigured())push=`<p class="note">כדי לקבל התראות מהאפליקציה צריך לחבר את Firebase (הקובץ firebase-config.js) ולפתוח את האפליקציה מהכתובת שלה ב־GitHub Pages.</p>`;
+  else if(ios&&!standalone)push=`<p class="note"><b>באייפון:</b> קודם מוסיפים את האפליקציה למסך הבית – בספארי לוחצים על כפתור השיתוף ⬆️ ← <b>הוספה למסך הבית</b>, ופותחים אותה משם. ואז חוזרים לכאן.</p>`;
+  else if(!CLOUD.ok)push=`<p class="note">${CLOUD.err?'⚠️ לא הצלחתי להתחבר ל־Firebase: '+esc(CLOUD.err):'מתחברת ל־Firebase…'}</p>`;
+  else if(S.push&&perm==='granted')push=`<div class="row"><span class="n">✅ ההתראות פעילות במכשיר הזה</span><button class="btn alt" id="pushOn">רענון</button></div><p class="note">מים כל שעה (07–21, נעצרות כשמגיעים ליעד), צעדים ב־20:00, אהבה עצמית, רצף / No drama בבוקר ותזכורת לפני יציאות – הכל מגיע מסקריפט ההתראות.</p>`;
+  else push=`<p class="note">התראות עם השם והאייקון של ניצחונות קטנים – גם כשהאפליקציה סגורה.</p><button class="btn" id="pushOn">🔔 הפעלת התראות</button>${perm==='denied'?'<p class="note"><b style="color:#d14b4b">ההתראות חסומות – צריך לאשר אותן בהגדרות הטלפון.</b></p>':''}`;
+  let html=`<h2>הגדרות</h2><h3>🔔 התראות מהאפליקציה</h3><div class="card">${push}</div><h3>💧 תזכורות כשהאפליקציה פתוחה</h3><div class="card">
+  <div class="row"><span class="n">תזכירי לי לשתות</span><label class="sw"><input type="checkbox" id="remOn" ${r.on?'checked':''}><i></i></label></div>
+  <div class="times">מ־ <select id="remStart">${hourOpts(r.start)}</select> עד <select id="remEnd">${hourOpts(r.end)}</select> כל <select id="remEvery">${[30,45,60,90,120,180].map(m=>`<option value="${m}" ${m==r.every?'selected':''}>${({30:'30 דק׳',45:'45 דק׳',60:'שעה',90:'שעה וחצי',120:'שעתיים',180:'3 שעות'})[m]}</option>`).join('')}</select></div>
+  <p class="note">התזכורות קופצות כשהאפליקציה פתוחה או ברקע, ונעצרות כשמגיעים ליעד המים. ב־20:00 תגיע גם תזכורת לצעדים אם עוד לא השלמת. ${perm==='denied'?'<b style="color:#d14b4b">ההתראות חסומות – צריך לאשר אותן בהגדרות הדפדפן/הטלפון.</b>':perm==='unsupported'?'<b>הדפדפן הזה לא תומך בהתראות – אפשר להשתמש באפשרות היומן למטה.</b>':''}</p>
+  <p class="note">אפשרות נוספת: להוסיף תזכורות מים קבועות ליומן בטלפון:</p>
+  <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn w" id="ics">📅 הוספה ליומן שלי</button><button class="btn alt" id="testN">שליחת בדיקה</button></div></div>`;
+  html+=`<h3>🎯 ההרגלים שלי</h3><div class="card">`;
+  for(const h of S.habits){html+=`<div class="row"><span style="font-size:22px">${h.emoji}</span><span class="n">${esc(h.name)}</span>${h.type!=='check'?`<input type="number" min="1" value="${h.goal}" data-goal="${h.id}" aria-label="יעד">`:''}<button class="x" data-del="${h.id}" aria-label="מחיקה">✕</button></div>`}
+  html+=`<div class="add"><input class="e" id="newE" value="⭐" maxlength="4" aria-label="אימוג׳י"><input class="nm" id="newN" placeholder="הרגל חדש, למשל 10 דקות מתיחות" maxlength="60"><button class="btn" id="addH">הוספה</button></div>
+  <p class="note">רעיונות: ״חלבון בארוחת בוקר״, ״להפסיק לאכול כשמרגישה 80% שובע״, ״הליכה אחרי ארוחת ערב״, ״פרי במקום קינוח״.</p></div>`;
+  html+=`<h3>✨ כיף</h3><div class="card"><div class="row"><span class="n">צלילי חגיגה</span><label class="sw"><input type="checkbox" id="snd" ${S.settings.sound?'checked':''}><i></i></label></div>
+  <div class="row"><span class="n">החזרת הרגלי ברירת המחדל</span><button class="btn alt" id="restore">החזרה</button></div></div>`;
+  document.getElementById('tab-settings').innerHTML=html;
+  bindSettings();
+}
+function renderAll(){renderHeader();renderToday();if(tab==='history')renderHistory();if(tab==='badges')renderBadges();if(tab==='settings')renderSettings()}
+
+// ---------- actions ----------
+function checkBadges(){const c=badgeCtx();const fresh=BADGES.filter(b=>b.t(c)&&!S.seenBadges.includes(b.id));if(fresh.length){S.seenBadges.push(...fresh.map(b=>b.id));save();return fresh[0]}return null}
+function levelOf(xp){return Math.min(Math.floor(xp/XP_PER_LEVEL),LEVELS.length-1)}
+function setVal(id,v){
+  const h=S.habits.find(x=>x.id===id);if(!h)return;
+  const day=S.days[viewKey]=S.days[viewKey]||{};
+  const prev=Number(day[id])||0,wasDone=isDone(h,day[id]),wasPerfect=dayStats(viewKey).perfect,lvlBefore=levelOf(totalXP());
+  day[id]=v;save();
+  const nowDone=isDone(h,v),st=dayStats(viewKey),lvlAfter=levelOf(totalXP());
+  renderAll();
+  const el=document.getElementById('h-'+id);
+  if(!wasDone&&nowDone){const r=el.getBoundingClientRect();el.classList.add('pop');confetti(r.left+40,r.top+r.height/2,45);chime(false);toast(pick(CHEERS)+`  +${h.xp} נק׳`)}
+  else if(h.type==='count'&&!nowDone&&v>prev){toast(`${pick(WATER_CHEERS)}  ${v}/${h.goal}`)}
+  else if(h.type==='number'&&!nowDone&&v>0){toast(`יפה! עוד ${(h.goal-v).toLocaleString()} ${h.unit||''} 💪`)}
+  const badge=checkBadges();
+  if(h.type==='weekly'&&!wasDone&&nowDone&&weekCount(h,viewKey)===h.goal){setTimeout(()=>{rain();chime(true);modal('🏋️‍♀️','יעד שבועי הושג!',`${h.goal} אימונים השבוע – את חזקה מבפנים ומבחוץ! 💪`)},400)}
+  else if(!wasPerfect&&st.perfect){setTimeout(()=>{rain();chime(true);modal('👏','יום מושלם!',`עשית כל הרגל והרגל. זה ${st.xp} נקודות והמון כבוד עצמי. קידה! 🌈`)},400)}
+  else if(lvlAfter>lvlBefore){setTimeout(()=>{rain();chime(true);modal('🎊',`שלב ${lvlAfter+1}!`,`עכשיו את ${LEVELS[lvlAfter]}. תראי כמה התקדמת!`)},400)}
+  else if(badge){setTimeout(()=>{confetti(innerWidth/2,innerHeight/3,90,1.3);chime(true);modal(badge.i,`תג חדש: ${badge.n}`,badge.d+' – הרווחת את זה!')},400)}
+}
+document.addEventListener('click',e=>{
+  const b=e.target.closest('[data-act]');if(!b||b.tagName==='INPUT')return;
+  const id=b.dataset.id,h=S.habits.find(x=>x.id===id),cur=(S.days[viewKey]||{})[id];
+  if(b.dataset.act==='toggle')setVal(id,!cur);
+  if(b.dataset.act==='inc')setVal(id,Math.min((Number(cur)||0)+1,h.goal+10));
+  if(b.dataset.act==='dec')setVal(id,Math.max((Number(cur)||0)-1,0));
+});
+document.addEventListener('change',e=>{const t=e.target;if(t.dataset.act==='num')setVal(t.dataset.id,Math.max(0,Math.round(Number(t.value)||0)))});
+document.getElementById('prev').onclick=()=>{viewKey=addDays(viewKey,-1);renderToday()};
+document.getElementById('next').onclick=()=>{if(viewKey<todayKey()){viewKey=addDays(viewKey,1);renderToday()}};
+
+let tab='today';
+document.getElementById('nav').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;tab=b.dataset.tab;document.querySelectorAll('nav button').forEach(x=>x.classList.toggle('on',x===b));document.querySelectorAll('section').forEach(s=>s.classList.toggle('hide',s.id!=='tab-'+tab));renderAll();scrollTo(0,0)});
+
+function bindSettings(){
+  const r=S.settings.remind;
+  document.getElementById('remOn').onchange=async e=>{r.on=e.target.checked;if(r.on){S.lastRemind=Date.now();if('Notification' in window&&Notification.permission==='default'){try{await Notification.requestPermission()}catch(_){}}toast('💧 תזכורות המים הופעלו!')}save();renderSettings()};
+  for(const [id,k] of [['remStart','start'],['remEnd','end'],['remEvery','every']])document.getElementById(id).onchange=e=>{r[k]=Number(e.target.value);if(r.end<=r.start)r.end=Math.min(24,r.start+1);save();renderSettings()};
+  document.getElementById('ics').onclick=downloadICS;
+  const pb=document.getElementById('pushOn');if(pb)pb.onclick=()=>registerPush(false);
+  document.getElementById('testN').onclick=async()=>{if('Notification' in window&&Notification.permission==='default'){try{await Notification.requestPermission()}catch(_){}}notify('💧 הגיע הזמן למים!',pick(WATER_CHEERS)+' אחרי הכוס, לחצי + באפליקציה.');renderSettings()};
+  document.getElementById('snd').onchange=e=>{S.settings.sound=e.target.checked;save()};
+  document.getElementById('restore').onclick=()=>{for(const d of DEFAULT_HABITS)if(!S.habits.some(h=>h.id===d.id))S.habits.push(JSON.parse(JSON.stringify(d)));save();renderAll();toast('הרגלי ברירת המחדל חזרו ✨')};
+  document.getElementById('addH').onclick=()=>{const n=document.getElementById('newN').value.trim();if(!n){toast('תני שם להרגל ✍️');return}S.habits.push({id:'c'+Date.now(),emoji:document.getElementById('newE').value.trim()||'⭐',name:n,type:'check',xp:15});save();renderAll();toast('נוסף הרגל חדש – את יכולה! 🌟')};
+  document.querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>{const h=S.habits.find(x=>x.id===b.dataset.del);if(!h)return;if(b.dataset.armed){S.habits=S.habits.filter(x=>x!==h);save();renderAll();toast('ההרגל הוסר')}else{b.dataset.armed='1';b.textContent='בטוחה?';b.style.width='auto';b.style.padding='0 10px';setTimeout(()=>{if(b.isConnected){delete b.dataset.armed;b.textContent='✕';b.style.width='';b.style.padding=''}},3000)}});
+  document.querySelectorAll('[data-goal]').forEach(i=>i.onchange=()=>{const h=S.habits.find(x=>x.id===i.dataset.goal);const g=Math.max(1,Math.round(Number(i.value)||1));h.goal=g;if(h.id==='steps')h.name=`ללכת ${g.toLocaleString()} צעדים`;if(h.id==='water')h.name=`לשתות ${g} כוסות מים`;save();renderAll()});
+}
+
+// ---------- reminders ----------
+function notify(title,body){
+  toast(title);
+  if(!('Notification' in window)||Notification.permission!=='granted')return;
+  const opts={body,icon:'icon-192.png',badge:'icon-192.png',tag:'water',renotify:true};
+  const fallback=()=>{try{new Notification(title,opts)}catch(e){}};
+  if(navigator.serviceWorker){navigator.serviceWorker.getRegistration().then(reg=>reg?reg.showNotification(title,opts):fallback()).catch(fallback)}else fallback();
+}
+function tickReminders(){
+  const r=S.settings.remind;if(!r.on)return;
+  {const now=new Date(),st=S.habits.find(x=>x.id==='steps'),td=todayKey(),v=Number((S.days[td]||{}).steps)||0;
+   if(now.getHours()===20&&st&&!isDone(st,v)&&S.stepsRemind!==td){S.stepsRemind=td;save();notify('👟 עוד קצת צעדים?',`יש לך ${v.toLocaleString()} מתוך ${st.goal.toLocaleString()}. הליכה קצרה עכשיו וסוגרים את היום בניצחון! 💪`)}}
+  const now=new Date(),h=now.getHours()+now.getMinutes()/60;if(h<r.start||h>=r.end)return;
+  const w=S.habits.find(x=>x.id==='water');const today=S.days[todayKey()]||{};if(w&&isDone(w,today.water))return;
+  if(Date.now()-(S.lastRemind||0)<r.every*60000)return;
+  S.lastRemind=Date.now();save();
+  const n=w?(Number(today.water)||0):0;
+  notify('💧 הגיע הזמן לכוס מים!',w?`שתית ${n}/${w.goal} היום. ${pick(WATER_CHEERS)}`:pick(WATER_CHEERS));
+}
+setInterval(tickReminders,30000);
+document.addEventListener('visibilitychange',()=>{if(!document.hidden){if(viewKey>todayKey())viewKey=todayKey();renderAll();tickReminders()}});
+function downloadICS(){
+  const r=S.settings.remind,d=new Date(),ymd=`${d.getFullYear()}${pad(d.getMonth()+1)}${pad(d.getDate())}`,stamp=new Date().toISOString().replace(/[-:]/g,'').split('.')[0]+'Z';
+  const L=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Little Wins//Water//EN','CALSCALE:GREGORIAN','METHOD:PUBLISH'];
+  for(let m=r.start*60;m<r.end*60;m+=r.every){const hh=pad(Math.floor(m/60)),mi=pad(m%60);L.push('BEGIN:VEVENT',`UID:littlewins-water-${hh}${mi}@littlewins`,`DTSTAMP:${stamp}`,`DTSTART:${ymd}T${hh}${mi}00`,'DURATION:PT5M','RRULE:FREQ=DAILY','SUMMARY:💧 לשתות כוס מים','DESCRIPTION:ואז ללחוץ + בניצחונות קטנים!','TRANSP:TRANSPARENT','BEGIN:VALARM','ACTION:DISPLAY','DESCRIPTION:💧 הגיע הזמן למים!','TRIGGER:-PT0M','END:VALARM','END:VEVENT')}
+  L.push('END:VCALENDAR');
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([L.join('\r\n')],{type:'text/calendar'}));a.download='water-reminders.ics';document.body.appendChild(a);a.click();a.remove();
+  toast('📅 פתחי את הקובץ כדי להוסיף את התזכורות');
+}
+
+if('serviceWorker' in navigator&&location.protocol.startsWith('http')){navigator.serviceWorker.register('sw.js').catch(()=>{})}
+// midnight rollover while open
+let lastToday=todayKey();setInterval(()=>{const t=todayKey();if(t!==lastToday){if(viewKey===lastToday)viewKey=t;lastToday=t;renderAll()}},60000);
+// ---------- Firebase: sync + push ----------
+const CLOUD={ok:false,uid:null,db:null,msg:null,err:''};
+var syncT=null;
+function cloudConfigured(){return typeof firebase!=='undefined'&&self.FIREBASE_CONFIG&&FIREBASE_CONFIG.apiKey}
+function scheduleSync(){clearTimeout(syncT);syncT=setTimeout(cloudSync,1500)}
+function cloudSync(){
+  if(!CLOUD.ok)return;
+  const t=todayKey(),day=S.days[t]||{},w=S.habits.find(h=>h.id==='water'),st=S.habits.find(h=>h.id==='steps');
+  const good=Object.keys(S.days).filter(k=>k<=t&&goodDay(k)).sort().slice(-120);
+  CLOUD.db.collection('users').doc(CLOUD.uid).set({
+    goodDays:good,hasHistory:Object.keys(S.days).some(k=>k<t),
+    today:{key:t,water:Number(day.water)||0,waterGoal:w?w.goal:8,steps:Number(day.steps)||0,stepsGoal:st?st.goal:6000},
+    updatedAt:firebase.firestore.FieldValue.serverTimestamp()
+  },{merge:true}).catch(e=>console.warn('sync',e));
+}
+async function cloudInit(){
+  if(!cloudConfigured())return;
+  try{
+    firebase.initializeApp(FIREBASE_CONFIG);
+    const cred=await firebase.auth().signInAnonymously();
+    CLOUD.uid=cred.user.uid;CLOUD.db=firebase.firestore();CLOUD.ok=true;
+    if(await firebase.messaging.isSupported()){
+      CLOUD.msg=firebase.messaging();
+      CLOUD.msg.onMessage(p=>{const n=p.notification||{};chime(true);modal('🔔',n.title||'',n.body||'')});
+      if(S.push&&'Notification' in window&&Notification.permission==='granted')registerPush(true);
+    }
+    cloudSync();
+  }catch(e){CLOUD.err=e.message||String(e);console.warn('cloud',e)}
+  if(tab==='settings')renderSettings();
+}
+async function registerPush(silent){
+  try{
+    if(!CLOUD.ok)throw new Error('אין חיבור ל־Firebase');
+    if(!CLOUD.msg)throw new Error('הדפדפן הזה לא תומך בהתראות (באייפון – צריך לפתוח מהמסך הבית)');
+    const perm=await Notification.requestPermission();
+    if(perm!=='granted'){if(!silent)toast('צריך לאשר התראות 🙏');renderSettings();return}
+    const reg=await navigator.serviceWorker.ready;
+    const token=await CLOUD.msg.getToken({vapidKey:VAPID_KEY,serviceWorkerRegistration:reg});
+    await CLOUD.db.collection('users').doc(CLOUD.uid).set({fcmToken:token,device:navigator.userAgent.slice(0,120)},{merge:true});
+    S.push=true;S.settings.remind.on=false;save();
+    if(!silent){toast('🔔 ההתראות הופעלו!');confetti(innerWidth/2,innerHeight/3,60)}
+  }catch(e){console.warn('push',e);if(!silent)modal('😕','לא הצלחתי להפעיל התראות',e.message||String(e))}
+  if(tab==='settings')renderSettings();
+}
+
+renderAll();
+dailyGreeting();
+cloudInit();
+</script>
+</body>
+</html>
