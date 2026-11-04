@@ -480,6 +480,7 @@ async function cloudInit(){
     firebase.initializeApp(FIREBASE_CONFIG);
     const cred=await firebase.auth().signInAnonymously();
     CLOUD.uid=cred.user.uid;CLOUD.db=firebase.firestore();CLOUD.ok=true;
+    CLOUD.db.collection('users').doc(CLOUD.uid).onSnapshot(sn=>applyHealth((sn.data()||{}).healthSteps),e=>console.warn('snap',e));
     if(await firebase.messaging.isSupported()){
       CLOUD.msg=firebase.messaging();
       CLOUD.msg.onMessage(p=>{const n=p.notification||{};chime(true);modal('🔔',n.title||'',n.body||'')});
@@ -488,6 +489,17 @@ async function cloudInit(){
     cloudSync();
   }catch(e){CLOUD.err=e.message||String(e);console.warn('cloud',e)}
   if(tab==='settings')renderSettings();
+}
+function applyHealth(hs){
+  const t=todayKey(),st=S.habits.find(x=>x.id==='steps');
+  if(!hs||hs.key!==t||!st)return;
+  const day=S.days[t]=S.days[t]||{},cur=Number(day.steps)||0,n=Number(hs.steps)||0;
+  if(n<=cur)return;
+  const wasDone=isDone(st,cur),lvlBefore=levelOf(totalXP());
+  day.steps=n;save();renderAll();
+  if(!wasDone&&isDone(st,n)){rain();chime(true);modal('👟','יעד הצעדים הושג!',`${n.toLocaleString()} צעדים היום – לפי אפליקציית Health. כל הכבוד! 🎉`)}
+  else toast(`👟 עודכן מ־Health: ${n.toLocaleString()} צעדים`);
+  if(levelOf(totalXP())>lvlBefore)setTimeout(()=>modal('🎊',`שלב ${levelOf(totalXP())+1}!`,`עכשיו את ${LEVELS[levelOf(totalXP())]}. תראי כמה התקדמת!`),2500);
 }
 async function registerPush(silent){
   try{
