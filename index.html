@@ -284,7 +284,7 @@ function renderHeader(){
   const h=new Date().getHours();
   document.getElementById('hello').textContent=(h<12?'בוקר טוב':h<17?'צהריים טובים':'ערב טוב')+' ☀️';
   const s=currentStreak(),el=document.getElementById('streak');
-  el.textContent=s?(s===1?'🔥 יום אחד':`🔥 ${s} ימים`):'🔥 בואי נתחיל רצף';el.classList.toggle('hot',s>=3);
+  el.textContent=s?(s===1?'🔥 יום אחד':`🔥 ${s} ימים`):'🔥 רצף חדש מתחיל היום';el.classList.toggle('hot',s>=3);
   const xp=totalXP(),li=Math.min(Math.floor(xp/XP_PER_LEVEL),LEVELS.length-1),max=li===LEVELS.length-1;
   document.getElementById('lvlName').textContent=`שלב ${li+1} · ${LEVELS[li]}`;
   document.getElementById('lvlXp').textContent=max?`${xp} נק׳`:`${xp-li*XP_PER_LEVEL} / ${XP_PER_LEVEL} נק׳`;
@@ -315,11 +315,17 @@ function renderToday(){
   document.getElementById('habits').innerHTML=S.habits.map(h=>habitHTML(h,day[h.id])).join('');
 }
 let loveIdx=null;
+function winsOf(k){const day=S.days[k]||{};return S.habits.filter(x=>isDone(x,day[x.id]))}
+// הודעת הבוקר: מתחילה תמיד ממה שכן עשית אתמול
 function dailyMessage(t){
   const y=addDays(t,-1),hasHistory=Object.keys(S.days).some(k=>k<t);
   if(!hasHistory)return {calm:false,title:'ברוכה הבאה! 🌱',text:'היום מתחילים. כל ניצחון קטן נחשב – ואת כבר עשית את הצעד הראשון כשפתחת את האפליקציה.'};
-  if(goodDay(y)){const s=currentStreak()||1;return {calm:false,title:`🔥 ${s===1?'יום אחד':s+' ימים'} ברצף!`,text:`${STREAK_LINES[s%STREAK_LINES.length]} אתמול עמדת ביעדים – היום את עוד צעד אחד קרוב יותר ליעד שלך.`}}
-  return {calm:true,title:'No drama 💜',text:NO_DRAMA};
+  const wins=winsOf(y),st=dayStats(y),icons=wins.map(x=>x.emoji).join(' ');
+  const streak=goodDay(y)?(currentStreak()||1):0;
+  const streakTxt=streak?` 🔥 ${streak===1?'יום אחד':streak+' ימים'} ברצף – עוד צעד קרוב ליעד!`:' היום ממשיכים לבנות על זה ✨';
+  if(st.perfect)return {calm:false,title:'🌈 אתמול היה יום מושלם!',text:`עשית את כל ההרגלים ${icons} – איזו אלופה!${streakTxt}`};
+  if(wins.length)return {calm:false,title:`🏅 אתמול אספת ${wins.length===1?'ניצחון אחד':wins.length+' ניצחונות'}!`,text:`${icons} – כל אחד מהם נחשב ונספר 💪${streakTxt}`};
+  return {calm:true,title:'☀️ בוקר חדש, דף חדש',text:NO_DRAMA};
 }
 function renderDaily(t,doy){
   const m=dailyMessage(t),el=document.getElementById('dailyMsg');
@@ -331,7 +337,7 @@ document.addEventListener('click',e=>{if(e.target.closest('[data-love]')){loveId
 function dailyGreeting(){
   const t=todayKey();if(S.lastDaily===t)return;S.lastDaily=t;save();
   const m=dailyMessage(t);
-  setTimeout(()=>{if(!m.calm){confetti(innerWidth/2,innerHeight/3,70,1.2);chime(true)}modal(m.calm?'🌀':'🔥',m.title,m.text)},500);
+  setTimeout(()=>{if(!m.calm){confetti(innerWidth/2,innerHeight/3,70,1.2);chime(true)}modal(m.calm?'☀️':'🎉',m.title,m.text)},500);
 }
 function renderHistory(){
   const t=todayKey(),cs=currentStreak(),bs=bestStreak(),c=badgeCtx();
@@ -470,6 +476,7 @@ function cloudSync(){
   const good=Object.keys(S.days).filter(k=>k<=t&&goodDay(k)).sort().slice(-120);
   CLOUD.db.collection('users').doc(CLOUD.uid).set({
     goodDays:good,hasHistory:Object.keys(S.days).some(k=>k<t),
+    recent:Object.fromEntries([0,1,2].map(i=>{const k=addDays(t,-i),s2=dayStats(k);return [k,{done:s2.done,total:s2.total,logged:!!S.days[k],wins:winsOf(k).map(x=>x.emoji)}]})),
     today:{key:t,water:Number(day.water)||0,waterGoal:w?w.goal:8,steps:Number(day.steps)||0,stepsGoal:st?st.goal:6000},
     updatedAt:firebase.firestore.FieldValue.serverTimestamp()
   },{merge:true}).catch(e=>console.warn('sync',e));
