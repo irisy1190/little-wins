@@ -11,7 +11,7 @@ try {
   }
 } catch (e) { /* offline or not configured – the app still works */ }
 
-const CACHE = 'little-wins-v7';
+const CACHE = 'little-wins-v8';
 const FILES = ['./', './index.html', './manifest.json', './firebase-config.js', './icon-192.png', './icon-512.png'];
 
 self.addEventListener('install', e => {
